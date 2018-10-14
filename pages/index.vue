@@ -1,66 +1,102 @@
 <template>
-  <section class="container">
-    <div>
-      <logo/>
-      <h1 class="title">
+  <div>
+    <header>
+      <h1>
         ctrl+money
       </h1>
-      <h2 class="subtitle">
+      <p>
         Control your money flow
-      </h2>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          class="button--green">Documentation</a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          class="button--grey">GitHub</a>
+      </p>
+    </header>
+    <hr>
+    <section>
+      <h2>{{ money }}</h2>
+      <label for="add">Add more</label>
+      <input
+        id="add"
+        type="number"
+        @keyup.enter="incrementMoney($event.target.valueAsNumber)"
+      >
+    </section>
+    <section v-if="categories.length">
+      <hr>
+      <h2>Expenses</h2>
+
+      <div
+        v-for="(category, index) in categories"
+        :key="index"
+      >
+        <h3>{{ category.title }}</h3>
+        <progress
+          :max="category.limit"
+          :value="category.current"
+        />
+        {{ (category.current / category.limit * 100).toFixed(2) }}%
+        <input
+          type="number"
+          @keyup.enter="incrementCategory(index, $event)"
+        >
       </div>
-    </div>
-  </section>
+    </section>
+    <section>
+      <hr>
+      <h2>Add category</h2>
+      <label>
+        Title
+        <input
+          v-model="newCategory.title"
+          type="text"
+        >
+      </label>
+      <br>
+      <label>
+        Limit
+        <input
+          v-model="newCategory.limit"
+          type="number"
+        >
+      </label>
+      <br>
+      <button @click="addCategory">create</button>
+    </section>
+  </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
-  components: {
-    Logo
-  }
+  data() {
+    return {
+      newCategory: {},
+    }
+  },
+  computed: {
+    ...mapState('wallet', {
+      categories: 'expenses',
+      money: state => state.money.toFixed(2),
+    }),
+  },
+  methods: {
+    ...mapActions('wallet',[
+      'incrementMoney',
+      'addExpense',
+      'incrementExpense',
+    ]),
+    addCategory() {
+      this.addExpense(this.newCategory)
+      this.newCategory = {}
+    },
+    incrementCategory(index, ev) {
+      this.incrementExpense({
+        index,
+        value: ev.target.valueAsNumber
+      })
+      ev.target.value = ''
+    },
+  },
 }
 </script>
 
 <style>
-
-.container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.title {
-  font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
-}
 </style>
