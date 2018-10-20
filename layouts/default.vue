@@ -1,5 +1,14 @@
 <template>
   <div>
+    <header>
+      <h1>
+        ctrl+money
+      </h1>
+      <p>
+        Control your money flow
+      </p>
+    </header>
+    <hr>
     <nuxt/>
   </div>
 </template>

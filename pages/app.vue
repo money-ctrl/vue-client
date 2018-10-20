@@ -1,14 +1,5 @@
 <template>
   <div>
-    <header>
-      <h1>
-        ctrl+money
-      </h1>
-      <p>
-        Control your money flow
-      </p>
-    </header>
-    <hr>
     <section>
       <h2>{{ money }}</h2>
       <label for="add">Add more</label>

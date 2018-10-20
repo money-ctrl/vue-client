@@ -1,5 +1,3 @@
-import Vuex from 'vuex'
-
 export const state = () => ({
   money: 0,
   expenses: [],

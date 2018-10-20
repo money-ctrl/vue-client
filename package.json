@@ -14,13 +14,15 @@
   },
   "dependencies": {
     "cross-env": "^5.2.0",
-    "nuxt": "^2.0.0"
+    "firebase": "^5.5.5",
+    "nuxt": "^2.0.0",
+    "vuex-easy-firestore": "^1.16.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0",
     "babel-eslint": "^8.2.1",
     "eslint": "^5.0.1",
     "eslint-loader": "^2.0.0",
-    "eslint-plugin-vue": "^4.0.0"
+    "eslint-plugin-vue": "^4.0.0",
+    "nodemon": "^1.11.0"
   }
 }
