@@ -68,6 +68,9 @@ export default {
       money: state => state.money.toFixed(2),
     }),
   },
+  created() {
+    this.$store.dispatch('wallety/openDBChannel')
+  },
   methods: {
     ...mapActions('wallet',[
       'incrementMoney',
