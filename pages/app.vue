@@ -2,11 +2,11 @@
   <div>
     <section>
       <h2>{{ money }}</h2>
-      <label for="add">Add more</label>
+      <label for="add">Add money</label>
       <input
         id="add"
         type="number"
-        @keyup.enter="incrementMoney($event.target.valueAsNumber)"
+        @keyup.enter="incrementMoney($event)"
       >
     </section>
     <section v-if="categories.length">
@@ -17,16 +17,19 @@
         v-for="(category, index) in categories"
         :key="index"
       >
-        <h3>{{ category.title }}</h3>
+        <h3 style="margin-top: 2em">{{ category.title }}</h3>
         <progress
           :max="category.limit"
           :value="category.current"
         />
-        {{ (category.current / category.limit * 100).toFixed(2) }}%
-        <input
-          type="number"
-          @keyup.enter="incrementCategory(index, $event)"
-        >
+        {{ category.current.toFixed(2) }} / {{ category.limit.toFixed(2) }} [ {{ (category.current / category.limit * 100).toFixed(2) }}% ]
+        <label>
+          spend money on {{ category.title }}
+          <input
+            type="number"
+            @keyup.enter="incrementCategory(index, $event)"
+          >
+        </label>
       </div>
     </section>
     <section>
@@ -55,6 +58,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
+import firebase from 'firebase/app'
 
 export default {
   data() {
@@ -63,28 +67,49 @@ export default {
     }
   },
   computed: {
-    ...mapState('wallet', {
-      categories: 'expenses',
-      money: state => state.money.toFixed(2),
+    ...mapState('user', {
+      money: ({money}) => money? money.toFixed(2) : 0.00,
+      categories: ({expenses}) => expenses? expenses : [],
     }),
   },
   created() {
-    this.$store.dispatch('wallety/openDBChannel')
+    firebase.auth().onAuthStateChanged(user => {
+      if (user){
+        this.$store.dispatch('user/openDBChannel').then(() => {
+          this.$router.push('/app')
+        }).catch(console.error)
+      } else {
+        this.$router.push('/')
+      }
+    })
   },
   methods: {
-    ...mapActions('wallet',[
-      'incrementMoney',
-      'addExpense',
-      'incrementExpense',
-    ]),
+    ...mapActions('user', {
+      set: 'set',
+    }),
+    incrementMoney(ev){
+      this.set({
+        money: ev.target.valueAsNumber + parseFloat(this.money),
+      })
+      ev.target.value = ''
+    },
     addCategory() {
-      this.addExpense(this.newCategory)
+      this.newCategory.limit = parseFloat(this.newCategory.limit)
+      this.newCategory.current = 0
+      this.set({
+        expenses: [
+          ...this.categories,
+          this.newCategory
+        ],
+      })
       this.newCategory = {}
     },
     incrementCategory(index, ev) {
-      this.incrementExpense({
-        index,
-        value: ev.target.valueAsNumber
+      const newExpenses = this.categories
+      newExpenses[index].current += ev.target.valueAsNumber
+      this.set({
+        money: parseFloat(this.money) - ev.target.valueAsNumber,
+        expenses: newExpenses,
       })
       ev.target.value = ''
     },

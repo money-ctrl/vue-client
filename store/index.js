@@ -1,10 +1,11 @@
 import createEasyFirestore from 'vuex-easy-firestore'
 
 const firestoreConfig = {
-  firestorePath: 'users/KMwcfHTBQB9A0rL3o2ic',
+  firestorePath: 'users/{userId}',
   firestoreRefType: 'doc',
-  moduleName: 'wallety',
+  moduleName: 'user',
 }
-const easyFirestore = createEasyFirestore(firestoreConfig, {logging: true})
+const easyFirestore = createEasyFirestore([firestoreConfig], {logging: true})
 export const plugins = [easyFirestore]
+export const strict = false
 
