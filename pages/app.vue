@@ -12,6 +12,9 @@
     <section v-if="categories.length">
       <hr>
       <h2>Expenses</h2>
+      <button @click="resetExpenses">
+        Reset expenses
+      </button>
 
       <div
         v-for="(category, index) in categories"
@@ -113,6 +116,15 @@ export default {
       })
       ev.target.value = ''
     },
+    resetExpenses() {
+      this.set({
+        expenses: this.categories.map(expense => {
+          const { current, limit } = expense;
+          expense.current = (current > limit) ? current - limit : 0
+          return expense
+        }),
+      })
+    }
   },
 }
 </script>
