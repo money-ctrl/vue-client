@@ -2,7 +2,7 @@
   <div>
     <header>
       <h1>
-        ctrl+money
+        money ctrl
       </h1>
       <p>
         Control your money flow
