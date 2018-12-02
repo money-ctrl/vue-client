@@ -1,4 +1,4 @@
-# ctrl+money
+# money+ctrl
 
 > Control your money flow
 
