@@ -13,12 +13,19 @@
       <hr>
       <h2>Expenses</h2>
       <div>
-        <h3 style="margin-top: 2em">Sum/Total/donno</h3>
+        <h3>Sum/Total/donno</h3>
         <progress
           :max="totalMax"
           :value="totalCurrent"
+          class="progress-bar"
         />
-        {{ totalCurrent.toFixed(2) }} / {{ totalMax.toFixed(2) }} [ {{ (totalCurrent / totalMax * 100).toFixed(2) }}% ]
+        {{ totalCurrent.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }) }}
+        /
+        {{ totalMax.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }) }}
+
+        [ {{ (totalCurrent / totalMax * 100).toFixed(2) }}% ]
+
+        <br>
 
         <button @click="resetExpenses">
           Reset expenses
@@ -29,14 +36,19 @@
         v-for="(category, index) in categories"
         :key="index"
       >
-        <h3 style="margin-top: 2em">{{ category.title }}</h3>
+        <h3>{{ category.title }}</h3>
         <progress
           :max="category.limit"
           :value="category.current"
+          class="progress-bar"
         />
-        {{ category.current.toFixed(2) }} / {{ category.limit.toFixed(2) }} [ {{ (category.current / category.limit * 100).toFixed(2) }}% ]
+        {{ category.current.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }) }}
+        /
+        {{ category.limit.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }) }}
+
+        [ {{ (category.current / category.limit * 100).toFixed(2) }}% ]
         <label>
-          spend money on {{ category.title }}
+          spend money on {{ category.title }}<br>
           <input
             type="number"
             @keyup.enter="incrementCategory(index, $event)"
@@ -54,7 +66,6 @@
           type="text"
         >
       </label>
-      <br>
       <label>
         Limit
         <input
@@ -62,7 +73,6 @@
           type="number"
         >
       </label>
-      <br>
       <button @click="addCategory">create</button>
     </section>
   </div>
@@ -80,7 +90,7 @@ export default {
   },
   computed: {
     ...mapState('user', {
-      money: ({money}) => money? money.toFixed(2) : 0.00,
+      money: ({money}) => (money? money : 0.00).toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }),
       categories: ({expenses}) => expenses? expenses : [],
     }),
     totalMax() {
@@ -146,4 +156,8 @@ export default {
 </script>
 
 <style>
+.progress-bar {
+  width: 100%;
+  height: 2em;
+}
 </style>
