@@ -12,9 +12,18 @@
     <section v-if="categories.length">
       <hr>
       <h2>Expenses</h2>
-      <button @click="resetExpenses">
-        Reset expenses
-      </button>
+      <div>
+        <h3 style="margin-top: 2em">Sum/Total/donno</h3>
+        <progress
+          :max="totalMax"
+          :value="totalCurrent"
+        />
+        {{ totalCurrent.toFixed(2) }} / {{ totalMax.toFixed(2) }} [ {{ (totalCurrent / totalMax * 100).toFixed(2) }}% ]
+
+        <button @click="resetExpenses">
+          Reset expenses
+        </button>
+      </div>
 
       <div
         v-for="(category, index) in categories"
@@ -74,6 +83,12 @@ export default {
       money: ({money}) => money? money.toFixed(2) : 0.00,
       categories: ({expenses}) => expenses? expenses : [],
     }),
+    totalMax() {
+      return this.categories.reduce((acc,item) => acc+item.limit, 0)
+    },
+    totalCurrent() {
+      return this.categories.reduce((acc,item) => acc+item.current,0)
+    },
   },
   created() {
     firebase.auth().onAuthStateChanged(user => {
@@ -85,6 +100,7 @@ export default {
         this.$router.push('/')
       }
     })
+    window.vm = this;
   },
   methods: {
     ...mapActions('user', {
