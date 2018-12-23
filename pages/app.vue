@@ -14,7 +14,7 @@
       <h2>Expenses</h2>
       <div>
         <h3>Sum/Total/donno</h3>
-        <progress
+        <progress-bar
           :max="totalMax"
           :value="totalCurrent"
           class="progress-bar"
@@ -37,7 +37,7 @@
         :key="index"
       >
         <h3>{{ category.title }}</h3>
-        <progress
+        <progress-bar
           :max="category.limit"
           :value="category.current"
           class="progress-bar"
@@ -81,8 +81,12 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import firebase from 'firebase/app'
+import progressBar from '~/components/progress-bar'
 
 export default {
+  components: {
+    progressBar,
+  },
   data() {
     return {
       newCategory: {},
