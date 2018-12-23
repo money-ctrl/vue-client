@@ -1,7 +1,7 @@
 <template>
   <div>
     <section>
-      <h2>{{ money }}</h2>
+      <h2>{{ money.toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }) }}</h2>
       <label for="add">Add money</label>
       <input
         id="add"
@@ -90,7 +90,7 @@ export default {
   },
   computed: {
     ...mapState('user', {
-      money: ({money}) => (money? money : 0.00).toLocaleString('pt-BR', { currency: 'BRL', style: 'currency' }),
+      money: ({money}) => (money? money : 0.00),
       categories: ({expenses}) => expenses? expenses : [],
     }),
     totalMax() {
