@@ -1,0 +1,16 @@
+{
+  "name": "moneyctrl",
+  "version": "2.0.0",
+  "description": "Control your money flow",
+  "author": "Vinícius Hoyer",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "deploy": "nuxt generate && firebase deploy",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "lint": "eslint --ext .js,.vue --ignore-path .gitignore .",
+    "precommit": "npm run lint"
+  }
+}
